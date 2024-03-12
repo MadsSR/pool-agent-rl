@@ -1,4 +1,5 @@
 import numpy as np
+from typing import Optional
 import fastfiz as ff
 
 
@@ -72,6 +73,17 @@ def create_table_state(n_balls: int) -> ff.TableState:
     return table_state
 
 
+def create_random_table_state(n_balls: int, seed: Optional[int] = None) -> ff.TableState:
+    table_state = create_table_state(n_balls)
+    table_state = randomize_table_state(table_state, seed)
+    return table_state
+
+
+def randomize_table_state(table_state: ff.TableState, seed: Optional[int] = None) -> None:
+    # TODO: Implement randomize_table_state using a seed
+    pass
+
+
 def interpolate_action(table_state: ff.TableState, action: np.ndarray) -> np.ndarray:
     a = np.interp(action[0], [0, 0], [0, 0])
     b = np.interp(action[1], [0, 0], [0, 0])
@@ -84,5 +96,5 @@ def interpolate_action(table_state: ff.TableState, action: np.ndarray) -> np.nda
     return [a, b, theta, phi, v]
 
 
-def get_shot_params_from_action(action: np.ndarray) -> ff.ShotParams:
+def shot_params_from_action(action: np.ndarray) -> ff.ShotParams:
     return ff.ShotParams(*interpolate_action(action))
