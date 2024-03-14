@@ -9,5 +9,5 @@ setup(
     packages=find_packages(),
     license='MIT',
     install_requires=requirements,
-    package_dir={"": "src"},
+    py_modules=['src'],
 )
