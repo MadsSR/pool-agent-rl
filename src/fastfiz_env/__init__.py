@@ -4,7 +4,7 @@ Gymnasium environments for pool, using FastFiz to simulate the physics of the ga
 Avaliable environments:
     - `BaseFastFiz-v0`: Base class for FastFiz.
     - `BaseRLFastFiz-v0`: Base class for FastFiz with reinforcement learning, using initial random table state.
-    - `PocketFastFiz-v0`: Subclass of BaseRLFastFiz. Observes if a ball is pocketed.
+    - `PocketRLFastFiz-v0`: Subclass of BaseRLFastFiz. Observes if a ball is pocketed.
 
 
 ### Example
@@ -44,7 +44,7 @@ register(
 )
 
 register(
-    id='PocketFastFiz-v0',
-    entry_point="fastfiz_env.envs:PocketFastFiz",
+    id='PocketRLFastFiz-v0',
+    entry_point="fastfiz_env.envs:PocketRLFastFiz",
     disable_env_checker=True
 )
