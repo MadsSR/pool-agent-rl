@@ -17,7 +17,7 @@ class BaseFastFiz(gym.Env):
         self.observation_space = self._observation_space()
         self.action_space = self._action_space()
 
-    def reset(self, seed: Optional[int] = None):
+    def reset(self, *, seed: Optional[int] = None, options: Optional[dict] = None) -> tuple[np.ndarray, dict]:
         """
         Reset the environment to its initial state.
         """

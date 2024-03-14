@@ -25,7 +25,7 @@ class BaseRLFastFiz(BaseFastFiz):
         self.observation_space = self._observation_space()
         self.action_space = self._action_space()
 
-    def reset(self, seed: int = None):
+    def reset(self, *, seed: Optional[int] = None, options: Optional[dict] = None) -> tuple[np.ndarray, dict]:
         super().reset(seed=seed)
 
         self.table_state = create_random_table_state(self.num_balls, seed=seed)
