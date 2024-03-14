@@ -2,7 +2,6 @@ import numpy as np
 from typing import Optional
 import fastfiz as ff
 
-
 POCKETS = [
     ff.Table.SW,
     ff.Table.SE,
@@ -80,8 +79,36 @@ def create_random_table_state(n_balls: int, seed: Optional[int] = None) -> ff.Ta
 
 
 def randomize_table_state(table_state: ff.TableState, seed: Optional[int] = None) -> None:
-    # TODO: Implement randomize_table_state using a seed
-    pass
+    if seed:
+        np.random.seed(seed)
+
+    table: ff.Table = table_state.getTable()
+    width: float = table.TABLE_WIDTH
+    length: float = table.TABLE_LENGTH
+
+    while True:
+        overlap = False
+        for i in range(table_state.getNumBalls()):
+            ball_i: ff.Ball = table_state.getBall(i)
+            if ball_i.isInPlay():
+                ball_radius: float = ball_i.getRadius()
+                ball_i.setPos(ff.Point(np.random.uniform(
+                    0 + ball_radius, width - ball_radius), np.random.uniform(0 + ball_radius, length - ball_radius)))
+                table_state.setBall(ball_i)
+
+                # Check overlap
+                for j in range(i):
+                    ball_j: ff.Ball = table_state.getBall(j)
+                    if ball_j.isInPlay() and ball_j != ball_i:
+                        overlap = ball_overlaps(ball_i, ball_j)
+                        if overlap:
+                            break
+                if overlap:
+                    break
+        if not overlap:
+            break
+
+    return table_state
 
 
 def interpolate_action(table_state: ff.TableState, action: np.ndarray) -> np.ndarray:
@@ -96,5 +123,16 @@ def interpolate_action(table_state: ff.TableState, action: np.ndarray) -> np.nda
     return [a, b, theta, phi, v]
 
 
-def shot_params_from_action(action: np.ndarray) -> ff.ShotParams:
-    return ff.ShotParams(*interpolate_action(action))
+def shot_params_from_action(table_state: ff.TableState, action: np.ndarray) -> ff.ShotParams:
+    return ff.ShotParams(*interpolate_action(table_state, action))
+
+
+def ball_overlaps(ball_1: ff.Ball, ball_2: ff.Ball) -> bool:
+    epsilon = 1.0e-11  # avoid floating point errors (from FastFiz.cpp)
+    dx = ball_1.getPos().x - ball_2.getPos().x
+    dy = ball_1.getPos().y - ball_2.getPos().y
+
+    assert ball_1.getRadius() == ball_2.getRadius(), "Balls must have the same radius"
+    radius = ball_1.getRadius()
+
+    return 4 * radius * radius - dx * dx - dy * dy > epsilon
