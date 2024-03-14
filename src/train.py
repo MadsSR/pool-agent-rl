@@ -1,15 +1,11 @@
 import gymnasium as gym
-from environment import FastFizEnv
 from gymnasium.envs.registration import register
-from gymnasium.vector import VectorEnv
 from stable_baselines3 import PPO
 from stable_baselines3.ppo.policies import MultiInputPolicy, MlpPolicy
 from stable_baselines3.common.vec_env import DummyVecEnv, VecNormalize
 from utils import ModelManager
-from environment import register_env
 from typing import Optional
 import json
-import os
 
 
 def read_config() -> dict:

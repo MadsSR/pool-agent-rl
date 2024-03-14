@@ -4,10 +4,11 @@ with open('requirements.txt') as f:
     requirements = f.read().splitlines()
 
 setup(
-    name='fastfizenv',
+    name='fastfiz-env',
     version='0.0.1',
-    packages=find_packages(),
     license='MIT',
     install_requires=requirements,
-    py_modules=['src'],
+    packages=find_packages(where='src', include=[
+                           'fastfiz_env', 'fastfiz_env.*']),
+    package_dir={"": "src"},
 )

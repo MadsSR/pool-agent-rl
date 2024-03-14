@@ -3,7 +3,7 @@ from gymnasium import spaces
 import gymnasium as gym
 import fastfiz as ff
 from typing import Optional
-from utils.fastfiz import create_random_table_state, get_ball_positions, num_balls_pocketed
+from utils.fastfiz import create_random_table_state, get_ball_positions, num_balls_pocketed, distances_to_closest_pockets
 from . import BaseFastFiz
 
 # Reward weights
@@ -29,6 +29,8 @@ class BaseRLFastFiz(BaseFastFiz):
         super().reset(seed=seed)
 
         self.table_state = create_random_table_state(self.num_balls, seed=seed)
+        self.min_dist = distances_to_closest_pockets(self.table_state)[
+            1:self.num_balls]
 
         observation = self._get_observation()
         info = self._get_info()
@@ -65,8 +67,14 @@ class BaseRLFastFiz(BaseFastFiz):
         step_pocketed = pocketed - prev_pocketed
 
         reward = step_pocketed * RW_BALL_POCKETED
-        reward += RW_SHOT_MADE
 
+        new_min_dist = distances_to_closest_pockets(
+            self.table_state)[1:self.num_balls]
+
+        if sum(new_min_dist) < sum(self.min_dist):
+            reward += 1
+
+        reward += RW_SHOT_MADE
         return reward
 
     def _get_info(self):
