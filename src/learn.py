@@ -3,7 +3,6 @@ from stable_baselines3.common.vec_env import VecNormalize
 from stable_baselines3.common.callbacks import CheckpointCallback, EvalCallback
 from stable_baselines3 import PPO
 from stable_baselines3.ppo.policies import MlpPolicy
-from fastfiz_env.envs import BaseRLFastFiz
 import gymnasium as gym
 import os
 
@@ -12,6 +11,7 @@ import os
 if os.path.exists("models/"):
     versions = [int(d.split("-")[1].split("v")[1])
                 for d in os.listdir("models/") if d.startswith("ppo")]
+    versions.append(0)
     VERSION = max(versions) + 1
 else:
     VERSION = 1
@@ -29,9 +29,13 @@ def make_env():
     return gym.make("BaseRLFastFiz-v0", num_balls=BALLS)
 
 
+net_arch = dict(pi=[128, 128, 128], vf=[128, 128, 128])
+
+
 env = VecNormalize(make_vec_env(make_env, n_envs=4),
                    training=True, norm_obs=True, norm_reward=True)
-model = PPO(MlpPolicy, env, verbose=1, tensorboard_log=TB_LOGS_DIR)
+model = PPO(MlpPolicy, env,
+            verbose=1, tensorboard_log=TB_LOGS_DIR, policy_kwargs={"net_arch": net_arch})
 
 
 checkpoint_callback = CheckpointCallback(name_prefix=MODEL_NAME,
