@@ -3,7 +3,7 @@ from stable_baselines3.common.vec_env import VecNormalize
 from stable_baselines3.common.callbacks import CheckpointCallback, EvalCallback
 from stable_baselines3 import PPO
 from stable_baselines3.ppo.policies import MlpPolicy
-from envs.BaseRLFastFiz import BaseRLFastFiz
+from fastfiz_env.envs import BaseRLFastFiz
 import gymnasium as gym
 import os
 
@@ -24,12 +24,9 @@ LOGS_DIR = f"logs/{MODEL_NAME}"
 MODEL_DIR = f"models/{MODEL_NAME}/"
 BEST_MODEL_DIR = f"models/{MODEL_NAME}/best/"
 
-gym.register(id="BaseRLFastFiz-v0", entry_point=BaseRLFastFiz,
-             kwargs={"num_balls": BALLS}, max_episode_steps=100)
-
 
 def make_env():
-    return gym.make("BaseRLFastFiz-v0")
+    return gym.make("BaseRLFastFiz-v0", num_balls=BALLS)
 
 
 env = VecNormalize(make_vec_env(make_env, n_envs=4),

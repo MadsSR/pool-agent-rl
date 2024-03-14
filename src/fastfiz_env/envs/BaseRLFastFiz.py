@@ -29,7 +29,7 @@ class BaseRLFastFiz(BaseFastFiz):
         super().reset(seed=seed)
 
         self.table_state = create_random_table_state(self.num_balls, seed=seed)
-        self.min_dist = distances_to_closest_pockets(self.table_state)[
+        self.min_dist = distances_to_closest_pockets(get_ball_positions(self.table_state))[
             1:self.num_balls]
 
         observation = self._get_observation()
@@ -69,7 +69,7 @@ class BaseRLFastFiz(BaseFastFiz):
         reward = step_pocketed * RW_BALL_POCKETED
 
         new_min_dist = distances_to_closest_pockets(
-            self.table_state)[1:self.num_balls]
+            get_ball_positions(self.table_state))[1:self.num_balls]
 
         if sum(new_min_dist) < sum(self.min_dist):
             reward += 1

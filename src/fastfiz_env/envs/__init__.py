@@ -5,10 +5,10 @@ from gymnasium import register
 
 register(
     id='BaseFastFiz-v0',
-    entry_point='fastfiz_env.envs:BaseFastFiz',
+    entry_point=BaseFastFiz,
 )
 
 register(
     id='BaseRLFastFiz-v0',
-    entry_point='fastfiz_env.envs:BaseRLFastFiz',
+    entry_point=BaseRLFastFiz,
 )
