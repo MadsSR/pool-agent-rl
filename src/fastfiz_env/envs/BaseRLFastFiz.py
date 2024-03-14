@@ -3,7 +3,7 @@ from gymnasium import spaces
 import gymnasium as gym
 import fastfiz as ff
 from typing import Optional
-from utils.fastfiz import create_random_table_state, get_ball_positions, num_balls_pocketed, distances_to_closest_pockets
+from ..utils.fastfiz import create_random_table_state, get_ball_positions, num_balls_pocketed, distances_to_closest_pockets
 from . import BaseFastFiz
 
 # Reward weights

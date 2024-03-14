@@ -1,9 +1,8 @@
 import numpy as np
 import gymnasium as gym
 import fastfiz as ff
-from utils.fastfiz import create_table_state, shot_params_from_action
+from ..utils.fastfiz import create_table_state, shot_params_from_action
 from typing import Optional
-from utils.env import RewardFunction
 
 
 class BaseFastFiz(gym.Env):
